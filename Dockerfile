@@ -2,7 +2,8 @@ FROM mcr.microsoft.com/devcontainers/base:bookworm
 
 # ── Node.js (pinned version) ────────────────────────────────────
 ARG NODE_VERSION=22.14.0
-RUN ARCH=$(dpkg --print-architecture) && \
+RUN DPKG_ARCH=$(dpkg --print-architecture) && \
+    case "$DPKG_ARCH" in amd64) ARCH=x64;; arm64) ARCH=arm64;; *) ARCH=$DPKG_ARCH;; esac && \
     curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH}.tar.xz" \
     | tar -xJ -C /usr/local --strip-components=1 && \
     node --version && npm --version
