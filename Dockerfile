@@ -15,7 +15,7 @@ RUN DPKG_ARCH=$(dpkg --print-architecture) && \
     | tar xz -C /usr/local/bin act
 
 # ── Claude Code + Playwright MCP ────────────────────────────────
-RUN npm install -g @anthropic-ai/claude-code && \
+RUN npm install -g @anthropic-ai/claude-code @playwright/mcp@latest && \
     npm cache clean --force
 
 # ── Chromium for Playwright MCP ──────────────────────────────────
@@ -36,10 +36,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     usermod -aG docker vscode
 
-# ── Docker Daemon Entrypoint ────────────────────────────────────
+# ── Docker Daemon Init Script (started via postStartCommand) ────
 COPY docker-init.sh /usr/local/share/docker-init.sh
 RUN chmod +x /usr/local/share/docker-init.sh
-ENTRYPOINT ["/usr/local/share/docker-init.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/innoq-trainings/agentic-se-image"
 LABEL org.opencontainers.image.description="DevContainer image for INNOQ Agentic SE trainings"
