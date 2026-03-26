@@ -9,7 +9,8 @@ RUN DPKG_ARCH=$(dpkg --print-architecture) && \
     node --version && npm --version
 
 # ── act (GitHub Actions local runner) ────────────────────────────
-RUN ARCH=$(dpkg --print-architecture) && \
+RUN DPKG_ARCH=$(dpkg --print-architecture) && \
+    case "$DPKG_ARCH" in amd64) ARCH=x86_64;; arm64) ARCH=arm64;; *) ARCH=$DPKG_ARCH;; esac && \
     curl -fsSL "https://github.com/nektos/act/releases/latest/download/act_Linux_${ARCH}.tar.gz" \
     | tar xz -C /usr/local/bin act
 
