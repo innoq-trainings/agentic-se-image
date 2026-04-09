@@ -2,7 +2,7 @@ name: Build DevContainer Image
 
 on:
   push:
-    branches: [main]
+    branches: [main, copilot]
     paths:
       - 'Dockerfile'
       - 'docker-init.sh'
@@ -40,7 +40,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=copilot,enable=${{ github.ref == 'refs/heads/copilot' }}
             type=sha
             type=raw,value={{date 'YYYYMMDD'}}
 
