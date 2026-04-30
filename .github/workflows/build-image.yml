@@ -2,7 +2,7 @@ name: Build DevContainer Image
 
 on:
   push:
-    branches: [main]
+    branches: [main, copilot]
     paths:
       - 'Dockerfile'
       - 'docker-init.sh'
@@ -40,9 +40,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=copilot,enable=${{ github.ref == 'refs/heads/copilot' }}
             type=sha
             type=raw,value={{date 'YYYYMMDD'}}
+
+      - id: cachebust
+        run: echo "value=$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
       - uses: docker/build-push-action@v6
         with:
@@ -51,5 +55,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CACHEBUST=${{ steps.cachebust.outputs.value }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

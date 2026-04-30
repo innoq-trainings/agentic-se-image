@@ -1,6 +1,8 @@
 # agentic-se-image
 
-Pre-built DevContainer image for the [INNOQ](https://www.innoq.com/) **Agentic Software Engineering** training. Used via GitHub Codespaces.
+Pre-built DevContainer image for [INNOQ](https://www.innoq.com/) **Agentic Software Engineering** trainings. Serves as a shared base for both Claude- and Copilot-based training variants. Used via GitHub Codespaces.
+
+> **Note:** VS Code extensions (e.g. `GitHub.copilot`, `GitHub.copilot-chat`, `anthropic.claude-code`) and training-specific secrets are configured in the consumer repositories' `devcontainer.json`, not in this image.
 
 ## What's included
 
@@ -8,6 +10,7 @@ Pre-built DevContainer image for the [INNOQ](https://www.innoq.com/) **Agentic S
 |---|---|
 | **Node.js** | 22.14.0 (pinned, binary tarball) |
 | **Claude Code** | `@anthropic-ai/claude-code` (latest at build time) |
+| **GitHub Copilot CLI** | `@github/copilot` (latest at build time) |
 | **Playwright MCP + Chromium** | Pre-installed so the MCP server starts instantly |
 | **Docker CE** | docker-ce, containerd, buildx, compose (official apt repo) |
 | **act** | GitHub Actions local runner (latest release) |
@@ -41,11 +44,13 @@ Pre-built DevContainer image for the [INNOQ](https://www.innoq.com/) **Agentic S
 The image is built and pushed to `ghcr.io/innoq-trainings/agentic-se-image` by a [GitHub Actions workflow](.github/workflows/build-image.yml).
 
 **Triggers:**
-- Push to `main` (when `Dockerfile`, `docker-init.sh`, or the workflow file changes)
+- Push to `main` or `copilot` (when `Dockerfile`, `docker-init.sh`, or the workflow file changes)
 - Weekly (Monday 06:00 UTC) to pick up security updates
 - Manual via `workflow_dispatch`
 
-**Tags:** `latest`, `sha-<commit>`, `YYYYMMDD`
+**Tags:**
+- `main` branch → `latest`, `sha-<commit>`, `YYYYMMDD`
+- `copilot` branch → `copilot`, `sha-<commit>`, `YYYYMMDD`
 
 ## Local development
 
@@ -59,6 +64,7 @@ docker run --rm -it --privileged agentic-se-image bash
 node --version        # v22.14.0
 act --version
 claude --version
+copilot --version
 gh --version
 docker --version
 ls /opt/playwright-browsers/   # Chromium present

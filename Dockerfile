@@ -14,8 +14,10 @@ RUN DPKG_ARCH=$(dpkg --print-architecture) && \
     curl -fsSL "https://github.com/nektos/act/releases/latest/download/act_Linux_${ARCH}.tar.gz" \
     | tar xz -C /usr/local/bin act
 
-# ── Claude Code + Playwright MCP ────────────────────────────────
-RUN npm install -g @anthropic-ai/claude-code @playwright/mcp@latest && \
+# ── Claude Code + Copilot CLI + Playwright MCP ─────────────────
+ARG CACHEBUST=1
+RUN echo "cachebust=${CACHEBUST}" && \
+    npm install -g @anthropic-ai/claude-code@latest @github/copilot@latest @playwright/mcp@latest && \
     npm cache clean --force
 
 # ── Chromium for Playwright MCP ──────────────────────────────────
