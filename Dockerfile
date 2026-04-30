@@ -15,7 +15,9 @@ RUN DPKG_ARCH=$(dpkg --print-architecture) && \
     | tar xz -C /usr/local/bin act
 
 # ── Claude Code + Copilot CLI + Playwright MCP ─────────────────
-RUN npm install -g @anthropic-ai/claude-code @github/copilot @playwright/mcp@latest && \
+ARG CACHEBUST=1
+RUN echo "cachebust=${CACHEBUST}" && \
+    npm install -g @anthropic-ai/claude-code@latest @github/copilot@latest @playwright/mcp@latest && \
     npm cache clean --force
 
 # ── Chromium for Playwright MCP ──────────────────────────────────

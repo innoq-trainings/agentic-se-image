@@ -45,6 +45,9 @@ jobs:
             type=sha
             type=raw,value={{date 'YYYYMMDD'}}
 
+      - id: cachebust
+        run: echo "value=$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
       - uses: docker/build-push-action@v6
         with:
           context: .
@@ -52,5 +55,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            CACHEBUST=${{ steps.cachebust.outputs.value }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
