@@ -25,7 +25,7 @@ RUN npx playwright install chromium --with-deps && \
 
 # ── Docker CE (Docker-in-Docker) ────────────────────────────────
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl gnupg && \
+    apt-get install -y --no-install-recommends bubblewrap ca-certificates curl gnupg socat && \
     install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     chmod a+r /etc/apt/keyrings/docker.gpg && \

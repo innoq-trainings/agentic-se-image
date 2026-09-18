@@ -12,6 +12,7 @@ Pre-built DevContainer image for the [INNOQ](https://www.innoq.com/) **Agentic S
 | **Docker CE** | docker-ce, containerd, buildx, compose (official apt repo) |
 | **act** | GitHub Actions local runner (latest release) |
 | **GitHub CLI** | `gh` (official apt repo) |
+| **Sandbox support** | `bubblewrap` and `socat` for Claude Code and compatible agent CLIs |
 | **Git, Zsh, Oh My Zsh** | From base image (`devcontainers/base:bookworm`) |
 
 ## Usage in a training repo
@@ -59,6 +60,8 @@ docker run --rm -it --privileged agentic-se-image bash
 node --version        # v22.14.0
 act --version
 claude --version
+bwrap --version
+socat -V
 gh --version
 docker --version
 ls /opt/playwright-browsers/   # Chromium present
